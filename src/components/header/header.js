@@ -9,7 +9,6 @@ import { signOut } from 'firebase/auth';
 import { auth } from '../../firebase.config';
 import useAuth from '../../customhooks/useauth';
 import logo from '../../assets/images/eco-logo.png'; // Import your logo image
-import userIcon from '../../assets/images/user-icon.png'; // Import your user icon image
 
 const nav_links = [
     { path: '/home', display: 'Home' },
@@ -52,7 +51,6 @@ const Header = () => {
 
     const menuToggle = () => menuRef.current.classList.toggle('active_menu');
     const navigateToCart = () => navigate("/cart");
-
     const toggleProfileActions = () => profileActionRef.current.classList.toggle('show_profileactions');
 
     return (
@@ -71,7 +69,7 @@ const Header = () => {
                             <ul className='menu'>
                                 {nav_links.map((item, index) => (
                                     <li className='nav_item' key={index}>
-                                        <NavLink to={item.path} className="nav_item" activeclassname="nav_active">
+                                        <NavLink to={item.path} className="nav_item" activeClassName="nav_active">
                                             {item.display}
                                         </NavLink>
                                     </li>
@@ -88,20 +86,22 @@ const Header = () => {
                                 <span className='badge'>{totalQuantity}</span>
                             </span>
                             <span>
-                                {currentuser && currentuser.photoURL ? (
-                                    <motion.img whileTap={{ scale: 1.2 }} src={currentuser.photoURL} alt='' onClick={toggleProfileActions} />
+                                {currentuser ? (
+                                    currentuser.photoURL ? (
+                                        <motion.img whileTap={{ scale: 1.2 }} src={currentuser.photoURL} alt='' onClick={toggleProfileActions} />
+                                    ) : (
+                                        <Link to='/login'>Login</Link>
+                                    )
                                 ) : (
-                                    <Link to='/login'>Login</Link>
+                                    <div className='d-flex align-items-center justify-content-center flex-column'>
+                                        <Link to='/signup'>Signup</Link>
+                                        <Link to='/login'>Login</Link>
+                                    </div>
                                 )}
                                 <div className='profile_actions' ref={profileActionRef} onClick={toggleProfileActions}>
                                     {currentuser ? (
                                         <span onClick={logout}>Logout</span>
-                                    ) : (
-                                        <div className='d-flex align-items-center justify-content-center flex-column'>
-                                            <Link to='/signup'>Signup</Link>
-                                            <Link to='/login'>Login</Link>
-                                        </div>
-                                    )}
+                                    ) : null}
                                 </div>
                             </span>
                         </div>
